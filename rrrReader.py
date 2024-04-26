@@ -273,7 +273,7 @@ class rrrReader:
         # The coordinate system the data to be imported are stored in
         toCRS= layer.crs()
         self.transformation = QgsCoordinateTransform(fromCRS, toCRS, QgsProject.instance())
-
+        readosi = False
         
         for idx,line in enumerate(lines):
             line = line.strip()
@@ -315,27 +315,35 @@ class rrrReader:
                         
                 continue
                 #if header == 'Activity Summary':
-            if line.startswith('Detected'):
+            if line.lower().startswith('detected'):
                 #    acttype = line
                 #   continue
-                if readquantified or line == 'Nuclides Quantified:':
-                    if line.startswith('Nuclide'):
-                        if line == 'Nuclides Quantified:':
-                            readquantified = True
-                            continue
-                        else:
-                            headers = re.split(r"\s{2,}",line)
-                            continue
-                    elif line.endswith(':'):
-                        readquantified = False
+                readosi = ' OSI ' in line
+            if readquantified or line == 'Nuclides Quantified:':
+                if line.startswith('Nuclide'):
+                    if line == 'Nuclides Quantified:':
+                        readquantified = True
                         continue
-                    data = re.split(r"\s{2,}",line)
-                   
-                    if len(data) > 2:
-                        line = {}
-                        for idx,head in enumerate(headers):
-                            line[head]=data[idx]
-                        rrr_data['nuclides'][line['Nuclide']] = line
+                    else:
+                        headers = re.split(r"\s{2,}",line)
+                        continue
+                elif line.endswith(':'):
+                    readquantified = False
+                    continue
+                data = re.split(r"\s{2,}",line)
+               
+                if len(data) > 2:
+                    line = {}
+                    for idx,head in enumerate(headers):
+                        line[head]=data[idx]
+                    rrr_data['nuclides'][line['Nuclide']] = line
+            if readosi:
+                if not line.lower().startswith('nuclide'):
+                    elems = line.split()
+                    if len(elems) > 2:
+                        osirelevantfound = True
+                        
+                line.lower()== 'none found'
         if not (lat is None or lon is None):
             rrr_data['attributes']=attributes
             insdata = [None,rrr,json.dumps(rrr_data),filename,osirelevantfound,sampleid,attributes['SampleType'],attributes['MissionCode'],attributes['BarCode']]

@@ -6,7 +6,7 @@
 name=RRR-reader
 qgisMinimumVersion=3.0
 description=Reads RRR files
-version=0.5
+version=0.7
 author=Morten Sickel
 email=morten@sickel.net
 
@@ -20,7 +20,7 @@ repository=https://github.com/sickel/rrr-reader
 
 hasProcessingProvider=no
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=0.7 Detecting if OSI-relevant radionuclides are found
 
 # Tags are comma separated with spaces allowed
 tags=radionuclides, data loader
