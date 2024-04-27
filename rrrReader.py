@@ -257,8 +257,9 @@ class rrrReader:
         osirelevantfound = False
         sampleid = None
         rrr_data = {}
-        rrr_data['nuclides']={}
-        rrr_data['attributes']={}
+        rrr_data['nuclides'] = {}
+        rrr_data['attributes'] = {}
+        rrr_data['osinuclides'] = {}
         #filename = "C:/Users/morten/rrr_244 (002).txt"
         layer=self.dlg.cbMapLayer.currentLayer()
         #layer = QgsProject.instance().mapLayersByName('rrr')[0]
@@ -274,7 +275,7 @@ class rrrReader:
         toCRS= layer.crs()
         self.transformation = QgsCoordinateTransform(fromCRS, toCRS, QgsProject.instance())
         readosi = False
-        
+        osisfound = []
         for idx,line in enumerate(lines):
             line = line.strip()
             if line.startswith('--------------------------'):
@@ -338,14 +339,19 @@ class rrrReader:
                         line[head]=data[idx]
                     rrr_data['nuclides'][line['Nuclide']] = line
             if readosi:
-                if not line.lower().startswith('nuclide'):
-                    elems = line.split()
-                    if len(elems) > 2:
-                        osirelevantfound = True
-                        
-                line.lower()== 'none found'
+                if line.lower().startswith('nuclide'):
+                    headers = re.split(r"\s{2,}",line)
+                    continue
+                data = re.split(r"\s{2,}",line)
+                if len(data) > 2:
+                    linedata = {}
+                    for idx,head in enumerate(headers):
+                        linedata[head]=data[idx]
+                    rrr_data['osinuclides'][linedata['Nuclide']] = linedata
+           
         if not (lat is None or lon is None):
-            rrr_data['attributes']=attributes
+            osirelevantfound = len(rrr_data['osinuclides']) > 0
+            rrr_data['attributes'] = attributes
             insdata = [None,rrr,json.dumps(rrr_data),filename,osirelevantfound,sampleid,attributes['SampleType'],attributes['MissionCode'],attributes['BarCode']]
             feature = QgsFeature()
             point=QgsPointXY(float(lon),float(lat))
