@@ -6,7 +6,7 @@
 name=RRR-reader
 qgisMinimumVersion=3.0
 description=Reads RRR files
-version=0.7
+version=0.71
 author=Morten Sickel
 email=morten@sickel.net
 
