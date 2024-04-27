@@ -229,6 +229,7 @@ class rrrReader:
             # This makes the dialog modal
             # self.dlg.pbLoadData.clicked.connect(self.selectfile)
             self.dlg.pbNewLayer.clicked.connect(self.newlayer)
+            self.dlg.cbMapLayer.setFilters(QgsMapLayerProxyModel.PointLayer)
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
