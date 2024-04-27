@@ -229,6 +229,7 @@ class rrrReader:
             # This makes the dialog modal
             # self.dlg.pbLoadData.clicked.connect(self.selectfile)
             self.dlg.pbNewLayer.clicked.connect(self.newlayer)
+            self.dlg.cbMapLayer.setFilters(QgsMapLayerProxyModel.PointLayer)
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
@@ -257,9 +258,9 @@ class rrrReader:
         osirelevantfound = False
         sampleid = None
         rrr_data = {}
+        rrr_data['osinuclides'] = {}
         rrr_data['nuclides'] = {}
         rrr_data['attributes'] = {}
-        rrr_data['osinuclides'] = {}
         #filename = "C:/Users/morten/rrr_244 (002).txt"
         layer=self.dlg.cbMapLayer.currentLayer()
         #layer = QgsProject.instance().mapLayersByName('rrr')[0]
