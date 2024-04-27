@@ -49,7 +49,7 @@
     <item>
      <widget class="QgsFileWidget" name="fwRRRFile">
       <property name="filter">
-       <string>rrr*.txt</string>
+       <string>rrr*</string>
       </property>
      </widget>
     </item>
